@@ -3,4 +3,24 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <!--region Colors picked from 2048 Game-->
+    <color name="translucent">#33ffff</color>
+    <color name="title_color">#776E65</color>
+    <color name="scoreboard_background">#BBADA0</color>
+    <color name="grid_background">#BBADA0</color>
+    <color name="cellColor">#CDC1B4</color>
+    <color name="cellColor_2">#EEE4DA</color>
+    <color name="cellColor_4">#EDE0C8</color>
+    <color name="cellColor_8">#F2B179</color>
+    <color name="cellColor_16">#F59563</color>
+    <color name="cellColor_32">#F67C60</color>
+    <color name="cellColor_64">#F65E3B</color>
+    <color name="cellColor_128">#EDCF73</color>
+    <color name="cellColor_256">#EDCC62</color>
+    <color name="cellColor_512">#EDC850</color>
+    <color name="cellColor_1024">#EDC53F</color>
+    <color name="cellColor_2048">#EDC22D</color>
+    <!--endregion-->
+
 </resources>
