@@ -17,15 +17,15 @@ public class LogUtils {
     }
 
     public static void showLog(String tag,String msg){
-        Log.d("LOG",msg);
+        Log.d(tag,msg);
     }
 
     public static void showError(String tag,String msg){
-        Log.e("LOG",msg);
+        Log.e(tag,msg);
     }
 
     public static void showInfo(String tag,String msg){
-        Log.i("LOG",msg);
+        Log.i(tag,msg);
     }
 
 }
