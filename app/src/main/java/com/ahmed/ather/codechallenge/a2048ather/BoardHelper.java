@@ -1,14 +1,17 @@
 package com.ahmed.ather.codechallenge.a2048ather;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
+import static com.ahmed.ather.codechallenge.a2048ather.LogUtils.*;
 
 public class BoardHelper {
+
     MergeAndShift mergeAndShift;
-    BoardHelper helper;
+
     public BoardHelper() {
         mergeAndShift = new MergeAndShift();
-        helper = new BoardHelper();
     }
 
     public String[] getBoardKeySet() {
@@ -17,7 +20,8 @@ public class BoardHelper {
 
     public void populateBoardMap(HashMap<String, Integer> map) {
         String[] arr = getBoardKeySet();
-        for (String s : arr) map.put(s, 0);
+        for (int i = 0; i < arr.length; i++)
+            map.put(arr[i], 0);
     }
 
     public void showBoardMap(HashMap<String, Integer> map) {
@@ -26,7 +30,7 @@ public class BoardHelper {
         for (int i = 1; i <= arr.length; i++) {
             System.out.print(i + " -> " + map.get(i + "") + " ");
             if (i == 4 || i == 8 || i == 12 || i == 16) {
-                System.out.println();
+                System.out.println("");
             }
         }
 
@@ -34,14 +38,14 @@ public class BoardHelper {
 
     public void showBoard(HashMap<String, Integer> map) {
         String[] arr = getBoardKeySet();
-
+        StringBuilder  builder = new StringBuilder();
         for (int i = 1; i <= arr.length; i++) {
-            System.out.print(map.get(i + "") + " ");
+            builder.append(map.get(i + "") + " ");
             if (i == 4 || i == 8 || i == 12 || i == 16) {
-                System.out.println();
+                builder.append("");
             }
         }
-
+        showInfo(builder.toString());
     }
 
     public String[] generateIndex(boolean generateTwoNumber) {
@@ -55,7 +59,7 @@ public class BoardHelper {
             r2--;
         }
 
-        String[] arr = new String[2];
+        String arr[] = new String[2];
         arr[0] = r1 + "";
         if (generateTwoNumber)
             arr[1] = r2 + "";
@@ -68,13 +72,15 @@ public class BoardHelper {
         String[][] keyArray = getArrayOfColoumns();
         int[][] valueArray = getValueArray2d(keyArray,map);
 
-        for (int[] ints : valueArray) {
-            mergeAndShift.mergeifTwoContinousElementsSame(ints);
+        for(int i=0;i<valueArray.length;i++) {
+//			valueArray[i] = mergeAndShift.reverse(valueArray[i]);
+            mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
             if (pushZeroToEnd) {
-                mergeAndShift.pushZerosToEnd(ints, ints.length);
+                mergeAndShift.pushZerosToEnd(valueArray[i], valueArray[i].length);
             } else {
-                mergeAndShift.pushZerosToStart(ints, ints.length);
+                mergeAndShift.pushZerosToStart(valueArray[i], valueArray[i].length);
             }
+
         }
 
         for(int j=0;j<keyArray.length;j++) {
@@ -82,20 +88,26 @@ public class BoardHelper {
                 map.put(keyArray[j][k], valueArray[j][k]);
             }
         }
-        helper.showBoard(map);
+
+        String key = getRandomKey(getArrayOfRows(), map);
+        map.put(key, getRandomValue(true));
+
+        showBoard(map);
     }
 
     public void moveBoardsHorizontally(HashMap<String, Integer> map, boolean pushZeroToEnd) {
         String[][] keyArray = getArrayOfRows();
         int[][] valueArray = getValueArray2d(keyArray,map);
 
-        for (int[] ints : valueArray) {
-            mergeAndShift.mergeifTwoContinousElementsSame(ints);
+        for(int i=0;i<valueArray.length;i++) {
+//			valueArray[i] = mergeAndShift.reverse(valueArray[i]);
+            mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
             if (pushZeroToEnd) {
-                mergeAndShift.pushZerosToEnd(ints, ints.length);
+                mergeAndShift.pushZerosToEnd(valueArray[i], valueArray[i].length);
             } else {
-                mergeAndShift.pushZerosToStart(ints, ints.length);
+                mergeAndShift.pushZerosToStart(valueArray[i], valueArray[i].length);
             }
+
         }
 
         for(int j=0;j<keyArray.length;j++) {
@@ -103,22 +115,27 @@ public class BoardHelper {
                 map.put(keyArray[j][k], valueArray[j][k]);
             }
         }
-        helper.showBoard(map);
+
+        String key = getRandomKey(getArrayOfRows(), map);
+        map.put(key, getRandomValue(true));
+
+        showBoard(map);
 
     }
 
     int[][] getValueArray2d(String[][] key2d,HashMap<String, Integer> map) {
 
-        int[][] valueArray = new int[4][4];
+        String keyArray[][] = key2d;
+        int valueArray[][] = new int[4][4];
 
-        for (int i = 0; i < key2d.length; i++)
-            valueArray[i] = MapMatrixMapper.getValueFromKey(key2d[i], map);
+        for (int i = 0; i < keyArray.length; i++)
+            valueArray[i] = MapMatrixMapper.getValueFromKey(keyArray[i], map);
 
         return valueArray;
     }
 
     String[][] getArrayOfColoumns() {
-        String[][] key2d = new String[4][4];
+        String key2d[][] = new String[4][4];
         key2d[0] = MapMatrixMapper.Vertical.col1;
         key2d[1] = MapMatrixMapper.Vertical.col2;
         key2d[2] = MapMatrixMapper.Vertical.col3;
@@ -127,7 +144,7 @@ public class BoardHelper {
     }
 
     String[][] getArrayOfRows() {
-        String[][] key2d = new String[4][4];
+        String key2d[][] = new String[4][4];
         key2d[0] = MapMatrixMapper.Horizontal.row1;
         key2d[1] = MapMatrixMapper.Horizontal.row2;
         key2d[2] = MapMatrixMapper.Horizontal.row3;
@@ -135,4 +152,35 @@ public class BoardHelper {
         return key2d;
     }
 
+    String getRandomKey(String[][] rows, HashMap<String, Integer> map) {
+
+        ArrayList<String> emptyTiles = new ArrayList<String>();
+
+        for(int i=0;i<rows.length;i++) {
+            for(String key:rows[i]) {
+                if(map.get(key) == 0)
+                    emptyTiles.add(key);
+            }
+        }
+
+        Random r = new Random();
+        int size = emptyTiles.size();
+        System.out.println("Empty tiles size: "+size);
+
+        return emptyTiles.get(r.nextInt(size));
+    }
+
+    int getRandomValue(boolean only2) {
+        int[] arr = new int[] {2,4};
+        Random r = new Random();
+        if (only2) {
+            return 2;
+        }else {
+            return arr[r.nextInt(arr.length)];
+        }
+    }
+
+    public ArrayList<String> getMapKeyList(){
+        return new ArrayList<String>(Arrays.asList("1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16"));
+    }
 }
