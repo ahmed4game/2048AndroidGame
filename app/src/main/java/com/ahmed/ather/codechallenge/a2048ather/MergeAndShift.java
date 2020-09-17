@@ -1,7 +1,13 @@
 package com.ahmed.ather.codechallenge.a2048ather;
 
 
+import android.util.Log;
+
 public class MergeAndShift {
+    BoardHelper.ScoreFeed feed;
+    public MergeAndShift(BoardHelper.ScoreFeed scoreFeed){
+        feed = scoreFeed;
+    }
 
     public void pushZerosToEnd(int arr[], int n) {
         int count = 0;
@@ -27,7 +33,7 @@ public class MergeAndShift {
             arr[count--] = 0;
     }
 
-    public void mergeifTwoContinousNonZeroElementSame(int arr[]) {
+/*    public void mergeifTwoContinousNonZeroElementSame(int arr[]) {
         int n = arr.length;
         outerloop: for (int i = 0; i < n - 1; i++) {
             if (arr[i] == 0) {
@@ -47,6 +53,30 @@ public class MergeAndShift {
                 }
             }
         }
+    }*/
+
+    public int mergeifTwoContinousNonZeroElementSame(int arr[]) {
+        int n = arr.length;
+        int points = 0;
+         for (int i = 0; i < n - 1; i++) {
+            if (arr[i] == 0) { }
+            else for (int j = i + 1; j < n; j++) {
+                if (arr[j] == 0) {
+                }
+                else if (arr[i] != arr[j]) {
+                    j = n;
+                } else if (arr[i] == arr[j]) {
+                    arr[i] = arr[i] + arr[j];
+                    points = arr[i];
+                    Log.d("POINTS",points+"");
+                    feed.updateScore(points);
+                    arr[j] = 0;
+                    i = j; // because all data until j already checked.
+                    break;
+                }
+            }
+        }
+         return points;
     }
 
 /*    public int[] reverse(int arr[]) {

@@ -8,10 +8,14 @@ import static com.ahmed.ather.codechallenge.a2048ather.LogUtils.*;
 
 public class BoardHelper {
 
+    public interface ScoreFeed{
+        void updateScore(int score);
+    }
+
     MergeAndShift mergeAndShift;
 
-    public BoardHelper() {
-        mergeAndShift = new MergeAndShift();
+    public BoardHelper(ScoreFeed feed) {
+        mergeAndShift = new MergeAndShift(feed);
     }
 
     public String[] getBoardKeySet() {
@@ -68,13 +72,15 @@ public class BoardHelper {
         return arr;
     }
 
-    public void moveBoardsVertically(HashMap<String, Integer> map, boolean pushZeroToEnd) {
+    public int moveBoardsVertically(HashMap<String, Integer> map, boolean pushZeroToEnd) {
         String[][] keyArray = getArrayOfColoumns();
+        int points = 0;
         int[][] valueArray = getValueArray2d(keyArray,map);
 
         for(int i=0;i<valueArray.length;i++) {
 //			valueArray[i] = mergeAndShift.reverse(valueArray[i]);
-            mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
+            points = mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
+            showInfo("Points: "+points);
             if (pushZeroToEnd) {
                 mergeAndShift.pushZerosToEnd(valueArray[i], valueArray[i].length);
             } else {
@@ -93,15 +99,17 @@ public class BoardHelper {
         map.put(key, getRandomValue(true));
 
         showBoard(map);
+        return points;
     }
 
-    public void moveBoardsHorizontally(HashMap<String, Integer> map, boolean pushZeroToEnd) {
+    public int moveBoardsHorizontally(HashMap<String, Integer> map, boolean pushZeroToEnd) {
         String[][] keyArray = getArrayOfRows();
         int[][] valueArray = getValueArray2d(keyArray,map);
+        int points = 0;
 
         for(int i=0;i<valueArray.length;i++) {
 //			valueArray[i] = mergeAndShift.reverse(valueArray[i]);
-            mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
+            points = mergeAndShift.mergeifTwoContinousNonZeroElementSame(valueArray[i]);
             if (pushZeroToEnd) {
                 mergeAndShift.pushZerosToEnd(valueArray[i], valueArray[i].length);
             } else {
@@ -120,7 +128,7 @@ public class BoardHelper {
         map.put(key, getRandomValue(true));
 
         showBoard(map);
-
+        return points;
     }
 
     int[][] getValueArray2d(String[][] key2d,HashMap<String, Integer> map) {

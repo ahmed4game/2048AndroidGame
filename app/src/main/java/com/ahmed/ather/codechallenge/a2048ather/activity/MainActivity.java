@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity {
     CardView gameCardView;
 
     BoardHelper boardHelper;
+    public int gameScore;
     private HashMap<String, Integer> map;
 
     @Override
@@ -56,7 +57,14 @@ public class MainActivity extends BaseActivity {
     private void initialSetup() {
         ButterKnife.bind(this);
         map = new HashMap<>();
-        boardHelper = new BoardHelper();
+        boardHelper = new BoardHelper(new BoardHelper.ScoreFeed() {
+            @Override
+            public void updateScore(int score) {
+                showInfo("Points from Feed: "+score);
+                gameScore = gameScore + score;
+                MainActivity.this.updateScore(gameScore);
+            }
+        });
         boardHelper.populateBoardMap(map);
         String[] mapKey = boardHelper.generateIndex(true);
         map.put(mapKey[0],2);
@@ -94,6 +102,14 @@ public class MainActivity extends BaseActivity {
         onGridChanged(boardHelper.getMapKeyList());
     }
 
+    private void updateScore(int score) {
+        currentScore.setText(""+score);
+        if (score > Integer.parseInt(bestScore.getText().toString())){
+            bestScore.setText(""+score);
+            storeScore(KEY,score+"");
+        }
+    }
+
     void setListenerToLayouts(View.OnTouchListener listener){
         parentLayout.setOnTouchListener(listener);
         gameView.setOnTouchListener(listener);
@@ -123,8 +139,8 @@ public class MainActivity extends BaseActivity {
 
                 //  set the value to TextView
                 if(map.get(list.get(position))!=0) {
-                    showInfo(position+"");
-                    showInfo(list.get(position));
+//                    showInfo(position+"");
+//                    showInfo(list.get(position));
                     final int value = map.get(list.get(position));
                     YoYo.with(Techniques.Pulse)
                             .duration(250)
@@ -135,7 +151,7 @@ public class MainActivity extends BaseActivity {
                                 }
                             })
                             .playOn(textView);
-                    showInfo("Value = "+value+" Position:"+position);
+//                    showInfo("Value = "+value+" Position:"+position);
 
                     changeCellColorBasedOnValue(textView, value);
                 }
