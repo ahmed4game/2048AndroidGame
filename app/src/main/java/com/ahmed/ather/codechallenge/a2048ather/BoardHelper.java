@@ -4,7 +4,11 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class BoardHelper {
+    MergeAndShift mergeAndShift;
+    BoardHelper helper;
     public BoardHelper() {
+        mergeAndShift = new MergeAndShift();
+        helper = new BoardHelper();
     }
 
     public String[] getBoardKeySet() {
@@ -13,8 +17,7 @@ public class BoardHelper {
 
     public void populateBoardMap(HashMap<String, Integer> map) {
         String[] arr = getBoardKeySet();
-        for (int i = 0; i < arr.length; i++)
-            map.put(arr[i], 0);
+        for (String s : arr) map.put(s, 0);
     }
 
     public void showBoardMap(HashMap<String, Integer> map) {
@@ -23,7 +26,7 @@ public class BoardHelper {
         for (int i = 1; i <= arr.length; i++) {
             System.out.print(i + " -> " + map.get(i + "") + " ");
             if (i == 4 || i == 8 || i == 12 || i == 16) {
-                System.out.println("");
+                System.out.println();
             }
         }
 
@@ -35,7 +38,7 @@ public class BoardHelper {
         for (int i = 1; i <= arr.length; i++) {
             System.out.print(map.get(i + "") + " ");
             if (i == 4 || i == 8 || i == 12 || i == 16) {
-                System.out.println("");
+                System.out.println();
             }
         }
 
@@ -52,13 +55,84 @@ public class BoardHelper {
             r2--;
         }
 
-        String arr[] = new String[2];
+        String[] arr = new String[2];
         arr[0] = r1 + "";
         if (generateTwoNumber)
             arr[1] = r2 + "";
 
         System.out.println(r1 + " " + r2);
         return arr;
+    }
+
+    public void moveBoardsVertically(HashMap<String, Integer> map, boolean pushZeroToEnd) {
+        String[][] keyArray = getArrayOfColoumns();
+        int[][] valueArray = getValueArray2d(keyArray,map);
+
+        for (int[] ints : valueArray) {
+            mergeAndShift.mergeifTwoContinousElementsSame(ints);
+            if (pushZeroToEnd) {
+                mergeAndShift.pushZerosToEnd(ints, ints.length);
+            } else {
+                mergeAndShift.pushZerosToStart(ints, ints.length);
+            }
+        }
+
+        for(int j=0;j<keyArray.length;j++) {
+            for(int k=0;k<keyArray[j].length;k++) {
+                map.put(keyArray[j][k], valueArray[j][k]);
+            }
+        }
+        helper.showBoard(map);
+    }
+
+    public void moveBoardsHorizontally(HashMap<String, Integer> map, boolean pushZeroToEnd) {
+        String[][] keyArray = getArrayOfRows();
+        int[][] valueArray = getValueArray2d(keyArray,map);
+
+        for (int[] ints : valueArray) {
+            mergeAndShift.mergeifTwoContinousElementsSame(ints);
+            if (pushZeroToEnd) {
+                mergeAndShift.pushZerosToEnd(ints, ints.length);
+            } else {
+                mergeAndShift.pushZerosToStart(ints, ints.length);
+            }
+        }
+
+        for(int j=0;j<keyArray.length;j++) {
+            for(int k=0;k<keyArray[j].length;k++) {
+                map.put(keyArray[j][k], valueArray[j][k]);
+            }
+        }
+        helper.showBoard(map);
+
+    }
+
+    int[][] getValueArray2d(String[][] key2d,HashMap<String, Integer> map) {
+
+        int[][] valueArray = new int[4][4];
+
+        for (int i = 0; i < key2d.length; i++)
+            valueArray[i] = MapMatrixMapper.getValueFromKey(key2d[i], map);
+
+        return valueArray;
+    }
+
+    String[][] getArrayOfColoumns() {
+        String[][] key2d = new String[4][4];
+        key2d[0] = MapMatrixMapper.Vertical.col1;
+        key2d[1] = MapMatrixMapper.Vertical.col2;
+        key2d[2] = MapMatrixMapper.Vertical.col3;
+        key2d[3] = MapMatrixMapper.Vertical.col4;
+        return key2d;
+    }
+
+    String[][] getArrayOfRows() {
+        String[][] key2d = new String[4][4];
+        key2d[0] = MapMatrixMapper.Horizontal.row1;
+        key2d[1] = MapMatrixMapper.Horizontal.row2;
+        key2d[2] = MapMatrixMapper.Horizontal.row3;
+        key2d[3] = MapMatrixMapper.Horizontal.row4;
+        return key2d;
     }
 
 }
