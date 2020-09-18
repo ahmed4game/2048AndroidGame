@@ -1,5 +1,7 @@
 package com.ahmed.ather.codechallenge.a2048ather;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -131,6 +133,22 @@ public class BoardHelper {
         return points;
     }
 
+    public boolean possibleMoveAvailable(HashMap<String, Integer> map){
+        boolean isAnyMovePossible = false;
+        String keyArray[][] = getRowAndColoumn();
+        int valueArray[][] = new int[getRowAndColoumn().length][getRowAndColoumn()[0].length];
+
+        for (int i = 0; i < keyArray.length; i++)
+            valueArray[i] = MapMatrixMapper.getValueFromKey(keyArray[i], map);
+
+        for(int i=0;i<valueArray.length;i++) {
+            if (mergeAndShift.checkPossible(valueArray[i]))
+                isAnyMovePossible = true;
+            LogUtils.showInfo("isAnyMovePossible: "+isAnyMovePossible);
+        }
+        return isAnyMovePossible;
+    }
+
     int[][] getValueArray2d(String[][] key2d,HashMap<String, Integer> map) {
 
         String keyArray[][] = key2d;
@@ -151,7 +169,21 @@ public class BoardHelper {
         return key2d;
     }
 
-    String[][] getArrayOfRows() {
+    String[][] getRowAndColoumn(){
+        String key2d[][] = new String[8][4];
+        key2d[0] = MapMatrixMapper.Vertical.col1;
+        key2d[1] = MapMatrixMapper.Vertical.col2;
+        key2d[2] = MapMatrixMapper.Vertical.col3;
+        key2d[3] = MapMatrixMapper.Vertical.col4;
+        key2d[4] = MapMatrixMapper.Horizontal.row1;
+        key2d[5] = MapMatrixMapper.Horizontal.row2;
+        key2d[6] = MapMatrixMapper.Horizontal.row3;
+        key2d[7] = MapMatrixMapper.Horizontal.row4;
+
+        return key2d;
+    }
+
+    public String[][] getArrayOfRows() {
         String key2d[][] = new String[4][4];
         key2d[0] = MapMatrixMapper.Horizontal.row1;
         key2d[1] = MapMatrixMapper.Horizontal.row2;
@@ -162,6 +194,16 @@ public class BoardHelper {
 
     String getRandomKey(String[][] rows, HashMap<String, Integer> map) {
 
+        ArrayList<String> emptyTiles = getNoOfEmptyTiles(rows, map);
+
+        Random r = new Random();
+        int size = emptyTiles.size();
+        System.out.println("Empty tiles size: "+size);
+
+        return emptyTiles.get(r.nextInt(size));
+    }
+
+    public ArrayList<String> getNoOfEmptyTiles(String[][] rows, HashMap<String, Integer> map) {
         ArrayList<String> emptyTiles = new ArrayList<String>();
 
         for(int i=0;i<rows.length;i++) {
@@ -170,12 +212,7 @@ public class BoardHelper {
                     emptyTiles.add(key);
             }
         }
-
-        Random r = new Random();
-        int size = emptyTiles.size();
-        System.out.println("Empty tiles size: "+size);
-
-        return emptyTiles.get(r.nextInt(size));
+        return emptyTiles;
     }
 
     int getRandomValue(boolean only2) {

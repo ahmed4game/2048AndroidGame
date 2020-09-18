@@ -41,6 +41,8 @@ public class MainActivity extends BaseActivity {
     ConstraintLayout parentLayout;
     @BindView(R.id.game_card_view)
     CardView gameCardView;
+    @BindView(R.id.game_over_layout) ConstraintLayout gameOverLayout;
+    @BindView(R.id.content_title) TextView contentTitle;
 
     BoardHelper boardHelper;
     public int gameScore;
@@ -74,6 +76,7 @@ public class MainActivity extends BaseActivity {
             public void onSwipeBottom() {
                 boardHelper.moveBoardsVertically(map,false);
                 onGridChanged(boardHelper.getMapKeyList());
+                checkPossibleMove();
                 showInfo("onSwipeBottom");
             }
 
@@ -81,6 +84,7 @@ public class MainActivity extends BaseActivity {
             public void onSwipeLeft() {
                 boardHelper.moveBoardsHorizontally(map,true);
                 onGridChanged(boardHelper.getMapKeyList());
+                checkPossibleMove();
                 showInfo("onSwipeLeft");
             }
 
@@ -88,6 +92,7 @@ public class MainActivity extends BaseActivity {
             public void onSwipeRight() {
                 boardHelper.moveBoardsHorizontally(map,false);
                 onGridChanged(boardHelper.getMapKeyList());
+                checkPossibleMove();
                 showInfo("onSwipeRight");
             }
 
@@ -95,6 +100,7 @@ public class MainActivity extends BaseActivity {
             public void onSwipeTop() {
                 boardHelper.moveBoardsVertically(map,true);
                 onGridChanged(boardHelper.getMapKeyList());
+                checkPossibleMove();
                 showInfo("onSwipeTop");
             }
         });
@@ -107,6 +113,18 @@ public class MainActivity extends BaseActivity {
         if (score > Integer.parseInt(bestScore.getText().toString())){
             bestScore.setText(""+score);
             storeScore(KEY,score+"");
+        }
+    }
+
+    private void checkPossibleMove(){
+        int noOfEmptyTiles = boardHelper.getNoOfEmptyTiles(boardHelper.getArrayOfRows(),map).size();
+        if (boardHelper.possibleMoveAvailable(map)){
+            showInfo("There is Possibility");
+        }else if (noOfEmptyTiles == 0) {
+                showInfo("There is no Possibility");
+                gameOverLayout.setVisibility(View.VISIBLE);
+        }else{
+            showInfo("There is Possibility because noOfEmptyTile is "+noOfEmptyTiles);
         }
     }
 

@@ -79,6 +79,26 @@ public class MergeAndShift {
          return points;
     }
 
+    public boolean checkPossible(int arr[]) {
+        int n = arr.length;
+        boolean isPossible = false;
+
+        for (int i = 0; i < n - 1; i++) {
+            if (arr[i] == 0) { }
+            else for (int j = i + 1; j < n; j++) {
+                if (arr[j] == 0) {
+                }
+                else if (arr[i] != arr[j]) {
+                    j = n;
+                } else if (arr[i] == arr[j]) {
+                    isPossible = true;
+                    break;
+                }
+            }
+        }
+        return isPossible;
+    }
+
 /*    public int[] reverse(int arr[]) {
         int[] b = new int[arr.length];
         int j = arr.length;
