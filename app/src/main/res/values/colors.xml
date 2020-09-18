@@ -6,6 +6,7 @@
 
     <!--region Colors picked from 2048 Game-->
     <color name="translucent">#33ffff</color>
+    <color name="board_background">#FAF8EF</color>
     <color name="game_over">#33ffff</color>
     <color name="game_over_background">#8AFFFFFF</color>
     <color name="game_won_background">#9AEDC22D</color>

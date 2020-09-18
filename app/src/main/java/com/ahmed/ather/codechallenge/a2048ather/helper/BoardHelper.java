@@ -8,6 +8,15 @@ import static com.ahmed.ather.codechallenge.a2048ather.helper.LogUtils.*;
 
 public class BoardHelper {
 
+    public boolean isTimeToSpawn4() {
+        return isTimeToSpawn4;
+    }
+
+    public void setTimeToSpawn4(boolean timeToSpawn4) {
+        isTimeToSpawn4 = timeToSpawn4;
+    }
+
+    private boolean isTimeToSpawn4;
     public interface ScoreFeed{
         void updateScore(int score);
     }
@@ -96,7 +105,7 @@ public class BoardHelper {
         }
 
         String key = getRandomKey(getArrayOfRows(), map);
-        map.put(key, getRandomValue(true));
+        map.put(key, getRandomValue(isTimeToSpawn4()));
 
         showBoard(map);
         return points;
@@ -213,10 +222,10 @@ public class BoardHelper {
         return emptyTiles;
     }
 
-    int getRandomValue(boolean only2) {
+    int getRandomValue(boolean spawn4) {
         int[] arr = new int[] {2,4};
         Random r = new Random();
-        if (only2) {
+        if (!spawn4) {
             return 2;
         }else {
             return arr[r.nextInt(arr.length)];

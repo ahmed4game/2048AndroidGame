@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
 
     private BoardHelper boardHelper;
     public int gameScore;
-    private final int scoreToWin = 2048;
+    private final int scoreToWin = 2048, scoreToSpawn4 = 16;
     private HashMap<String, Integer> map;
     private OnSwipeTouchListener swipeTouchListener;
 
@@ -102,6 +102,8 @@ public class MainActivity extends BaseActivity {
                 MainActivity.this.updateScore(gameScore);
                 if (score == scoreToWin)
                     gameWon();
+                else if (score == scoreToSpawn4)
+                    boardHelper.setTimeToSpawn4(true);
             }
         });
         boardHelper.populateBoardMap(map);
@@ -125,6 +127,7 @@ public class MainActivity extends BaseActivity {
         contentTitle.setTextColor(getColor(R.color.cardview_dark_background));
         resetButton.setVisibility(View.GONE);
         setListenerToLayouts(swipeTouchListener);
+        boardHelper.setTimeToSpawn4(false);
     }
 
     private void updateScore(int score) {
@@ -180,6 +183,7 @@ public class MainActivity extends BaseActivity {
                 textView.setBackgroundColor(getResources().getColor(R.color.cellColor));
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(34f);
+                textView.setTextColor(getColor(R.color.cardview_light_background));
                 textView.setTypeface(null, Typeface.BOLD);
 
 
