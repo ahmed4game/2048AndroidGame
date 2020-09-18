@@ -2,7 +2,6 @@ package com.ahmed.ather.codechallenge.a2048ather.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -18,14 +17,13 @@ import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ahmed.ather.codechallenge.a2048ather.BoardHelper;
-import com.ahmed.ather.codechallenge.a2048ather.OnSwipeTouchListener;
+import com.ahmed.ather.codechallenge.a2048ather.helper.BoardHelper;
+import com.ahmed.ather.codechallenge.a2048ather.implementation.OnSwipeTouchListener;
 import com.ahmed.ather.codechallenge.a2048ather.R;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import butterknife.BindView;

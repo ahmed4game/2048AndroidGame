@@ -1,12 +1,10 @@
-package com.ahmed.ather.codechallenge.a2048ather;
-
-import android.util.Log;
+package com.ahmed.ather.codechallenge.a2048ather.helper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
-import static com.ahmed.ather.codechallenge.a2048ather.LogUtils.*;
+import static com.ahmed.ather.codechallenge.a2048ather.helper.LogUtils.*;
 
 public class BoardHelper {
 

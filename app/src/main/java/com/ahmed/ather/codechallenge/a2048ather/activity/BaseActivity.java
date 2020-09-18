@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ahmed.ather.codechallenge.a2048ather.helper.LogUtils;
+
 public class BaseActivity extends AppCompatActivity {
     SharedPreferences sharedpreferences;
     public final String KEY = "key";
@@ -33,10 +35,12 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     void showInfo(String msg){
-        Log.i(BaseActivity.this.getLocalClassName(),msg);
+        LogUtils.showInfo(msg);
     }
 
     void showLog(String msg){
-        Log.i(BaseActivity.this.getLocalClassName(),msg);
+        LogUtils.showLog(msg);
     }
+
+    void showError(String msg) {LogUtils.showError(msg);}
 }

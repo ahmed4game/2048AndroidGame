@@ -1,4 +1,4 @@
-package com.ahmed.ather.codechallenge.a2048ather;
+package com.ahmed.ather.codechallenge.a2048ather.helper;
 
 
 import android.util.Log;
